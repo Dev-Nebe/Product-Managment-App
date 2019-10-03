@@ -1,56 +1,62 @@
 import { Component, OnInit } from '@angular/core';
-
 import { IProduct } from './product';
 import { ProductService } from './product.service';
 
 @Component({
-  templateUrl: './product-list.component.html',
-  styleUrls: ['./product-list.component.css']
+    templateUrl: './product-list.component.html',
+    styleUrls: ['./product-list.component.css']
 })
+
+
 export class ProductListComponent implements OnInit {
-  pageTitle = 'Product List';
-  imageWidth = 50;
-  imageMargin = 2;
-  showImage = false;
-  errorMessage = '';
+    // tslint:disable-next-line: no-inferrable-types
+    pageTitle: string = 'Product List';
+    // tslint:disable-next-line: no-inferrable-types
+    imageWidth: number = 50;
+    // tslint:disable-next-line: no-inferrable-types
+    imageMargin: number = 2;
+    // tslint:disable-next-line: no-inferrable-types
+    showImage: boolean = false;
+    errorMessage: string;
+    // tslint:disable-next-line: no-inferrable-types
+    _listFilter: string;
 
-  _listFilter = '';
-  get listFilter(): string {
-    return this._listFilter;
-  }
-  set listFilter(value: string) {
-    this._listFilter = value;
-    this.filteredProducts = this.listFilter ? this.performFilter(this.listFilter) : this.products;
-  }
+    get listFilter(): string {
+      return this._listFilter;
+    }
 
-  filteredProducts: IProduct[] = [];
-  products: IProduct[] = [];
+    set listFilter(value: string) {
+      this._listFilter = value;
+      this.filteredProducts = this.listFilter ? this.performFilter(this.listFilter) : this.products;
+    }
 
-  constructor(private productService: ProductService) {
+    filteredProducts: IProduct[];
 
-  }
+    products: IProduct[] = [];
 
-  onRatingClicked(message: string): void {
-    this.pageTitle = 'Product List: ' + message;
-  }
+      constructor(private productService: ProductService) {
+      }
 
-  performFilter(filterBy: string): IProduct[] {
-    filterBy = filterBy.toLocaleLowerCase();
-    return this.products.filter((product: IProduct) =>
-      product.productName.toLocaleLowerCase().indexOf(filterBy) !== -1);
-  }
+      onRatingClicked(message: string): void {
+        this.pageTitle = 'Product List: ' + message;
+      }
 
-  toggleImage(): void {
-    this.showImage = !this.showImage;
-  }
+      performFilter(filterBy: string): IProduct[] {
+        filterBy = filterBy.toLocaleLowerCase();
+        return this.products.filter((product: IProduct) => product.productName.toLocaleLowerCase().indexOf(filterBy) !== -1);
+      }
 
-  ngOnInit(): void {
-    this.productService.getProducts().subscribe({
-      next: products => {
-        this.products = products;
-        this.filteredProducts = this.products;
-      },
-      error: err => this.errorMessage = err
-    });
-  }
+      toggleImage(): void {
+          this.showImage = !this.showImage;
+      }
+
+      ngOnInit(): void {
+        this.productService.getProducts().subscribe({
+          next: products => {
+            this.products = products;
+            this.filteredProducts = this.products;
+          },
+          error: err => this.errorMessage = err
+        });
+      }
 }

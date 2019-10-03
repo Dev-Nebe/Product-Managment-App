@@ -3,17 +3,16 @@ import { CommonModule } from '@angular/common';
 import { StarComponent } from './star.component';
 import { FormsModule } from '@angular/forms';
 
+
+
 @NgModule({
+  declarations: [StarComponent],
   imports: [
     CommonModule
-  ],
-  declarations: [
-    StarComponent
   ],
   exports: [
     StarComponent,
     CommonModule,
-    FormsModule
-  ]
+    FormsModule]
 })
 export class SharedModule { }

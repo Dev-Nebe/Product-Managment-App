@@ -1,39 +1,36 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { IProduct } from './product';
-import { ProductService } from './product.service';
 
 @Component({
+  // selector: 'pm-product-detail', // Only needed if you inted to nest this component within another
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.css']
 })
 export class ProductDetailComponent implements OnInit {
-  pageTitle = 'Product Detail';
-  errorMessage = '';
-  product: IProduct | undefined;
+  // tslint:disable-next-line: no-inferrable-types
+  pageTitle: string = 'Product Detail';
+  product: IProduct;
 
-  constructor(private route: ActivatedRoute,
-              private router: Router,
-              private productService: ProductService) {
-  }
+  constructor(private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
-    const param = this.route.snapshot.paramMap.get('id');
-    if (param) {
-      const id = +param;
-      this.getProduct(id);
-    }
-  }
-
-  getProduct(id: number) {
-    this.productService.getProduct(id).subscribe({
-      next: product => this.product = product,
-      error: err => this.errorMessage = err
-    });
+    const id: number = +this.route.snapshot.paramMap.get('id');
+    this.pageTitle += `: ${id}`;
+    this.product = {
+      productId: 1,
+      productName: 'Leaf Rake',
+      productCode: 'GDN-0011',
+      releaseDate: 'March 19, 2019',
+      description: 'Leaf rake with 48-inch wooden handle.',
+      price: 19.95,
+      starRating: 3.2,
+      imageUrl: 'assets/images/leaf_rake.png'
+    };
   }
 
   onBack(): void {
     this.router.navigate(['/products']);
   }
+
 }
